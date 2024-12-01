@@ -1,0 +1,31 @@
+.contact {
+  background-color: #dcedc8;
+  padding: 50px 20px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.contact h2 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.contact p {
+  font-size: 1.2rem;
+  color: #666;
+  max-width: 800px;
+}
+
+.contact a {
+  color: #4e54c8;
+  text-decoration: none;
+}
+
+.contact a:hover {
+  text-decoration: underline;
+}

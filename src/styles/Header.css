@@ -1,0 +1,21 @@
+.header {
+  background: linear-gradient(120deg, #4e54c8, #8f94fb);
+  color: white;
+  padding: 50px 20px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.header h1 {
+  font-size: 3rem;
+  margin: 0;
+}
+
+.header p {
+  font-size: 1.2rem;
+  margin-top: 20px;
+}
