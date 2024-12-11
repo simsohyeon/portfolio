@@ -1,0 +1,13 @@
+# Gradle 캐시 및 빌드 출력물
+.gradle/
+build/
+
+# IDE 파일
+.idea/
+*.iml
+
+# Node.js 의존성 파일
+node_modules/
+
+# 환경 변수 파일
+.env
