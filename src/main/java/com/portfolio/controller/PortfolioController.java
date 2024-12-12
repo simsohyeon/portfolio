@@ -1,26 +1,42 @@
 package com.portfolio.controller;
 
+import com.portfolio.model.PortfolioSection;
+import com.portfolio.service.PortfolioService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/resumes")
-@CrossOrigin(origins = "http://localhost:3000") // React 앱의 주소를 추가
+@CrossOrigin(origins = "http://localhost:3000") // React 개발 서버 허용
 public class PortfolioController {
 
+    private final PortfolioService portfolioService;
+
+    public PortfolioController(PortfolioService portfolioService) {
+        this.portfolioService = portfolioService;
+    }
+
     @GetMapping("/latest")
-    public Map<String, Object> getPortfolioData() {
-        Map<String, Object> data = new HashMap<>();
-        data.put("about", "I am a passionate developer with experience in building web applications.");
-        data.put("skills", List.of("Java", "Spring Boot", "React", "MongoDB"));
-        data.put("projects", List.of(
-                Map.of("title", "Project A", "description", "Description of project A"),
-                Map.of("title", "Project B", "description", "Description of project B")
-        ));
-        data.put("contact", List.of("Email: example@example.com", "Phone: 123-456-7890"));
-        return data;
+    public ResponseEntity<List<PortfolioSection>> getAllSections() {
+        return ResponseEntity.ok(portfolioService.getAllSections());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<PortfolioSection> getSectionById(@PathVariable String id) {
+        PortfolioSection section = portfolioService.getSectionById(id);
+        return section != null ? ResponseEntity.ok(section) : ResponseEntity.notFound().build();
+    }
+
+    @PostMapping
+    public ResponseEntity<PortfolioSection> createSection(@RequestBody PortfolioSection section) {
+        return ResponseEntity.ok(portfolioService.saveSection(section));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteSection(@PathVariable String id) {
+        portfolioService.deleteSection(id);
+        return ResponseEntity.noContent().build();
     }
 }

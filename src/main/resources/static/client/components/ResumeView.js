@@ -1,21 +1,24 @@
 import React, { useEffect, useState } from "react";
-import { fetchResume } from "../api/api";
+import { fetchResume } from "../api/api"; // API 호출 함수 가져오기
 
 const ResumeView = () => {
-  const [resumeData, setResumeData] = useState(null);
+  const [resumeData, setResumeData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     const loadResume = async () => {
       try {
-        const data = await fetchResume(); // API 호출
-        console.log("API 응답 데이터:", data); // 디버깅용 로그
-        setResumeData(data); // 상태 업데이트
-        setLoading(false); // 로딩 완료
+        const data = await fetchResume();
+        if (data && data.length > 0) {
+          setResumeData(data); // 배열 전체를 저장
+        } else {
+          setError("No data found.");
+        }
+        setLoading(false);
       } catch (err) {
         console.error("API 요청 실패:", err);
-        setError(err.message); // 에러 상태 업데이트
+        setError(err.message);
         setLoading(false);
       }
     };
@@ -23,38 +26,43 @@ const ResumeView = () => {
     loadResume();
   }, []);
 
-  if (loading) return <p>Loading...</p>; // 로딩 중
-  if (error) return <p>Error: {error}</p>; // 에러 발생 시
-  if (!resumeData) return <p>데이터가 없습니다.</p>; // 데이터 없음 처리
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <div>
-      <h2>About</h2>
-      <p>{resumeData.about}</p>
+      {resumeData.map((resume, index) => (
+        <div key={index}>
+          <h2>About</h2>
+          <p>{resume.about?.about}</p>
 
-      <h2>Skills</h2>
-      <ul>
-        {resumeData.skills?.map((skill, index) => (
-          <li key={index}>{skill}</li>
-        ))}
-      </ul>
+          <h2>Skills</h2>
+          <ul>
+            {resume.skills?.map((skill, skillIndex) => (
+              <li key={skillIndex}>{skill}</li>
+            ))}
+          </ul>
 
-      <h2>Projects</h2>
-      <ul>
-        {resumeData.projects?.map((project, index) => (
-          <li key={index}>
-            <h3>{project.title}</h3>
-            <p>{project.description}</p>
-          </li>
-        ))}
-      </ul>
+          <h2>Projects</h2>
+          <ul>
+            {resume.projects?.map((project, projectIndex) => (
+              <li key={projectIndex}>
+                <h3>{project.title}</h3>
+                <p>{project.description}</p>
+              </li>
+            ))}
+          </ul>
 
-      <h2>Contact</h2>
-      <ul>
-        {resumeData.contact?.map((contact, index) => (
-          <li key={index}>{contact}</li>
-        ))}
-      </ul>
+          <h2>Contact</h2>
+          <ul>
+            {resume.contact?.map((contact, contactIndex) => (
+              <li key={contactIndex}>{contact}</li>
+            ))}
+          </ul>
+
+          <hr /> {/* 각 이력서 항목 사이에 구분선 */}
+        </div>
+      ))}
     </div>
   );
 };

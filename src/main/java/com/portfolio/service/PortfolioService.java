@@ -2,60 +2,32 @@ package com.portfolio.service;
 
 import com.portfolio.model.PortfolioSection;
 import com.portfolio.repository.PortfolioRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class PortfolioService {
 
-    @Autowired
-    private PortfolioRepository repository;
+    private final PortfolioRepository portfolioRepository;
 
-    // 모든 섹션 조회
+    public PortfolioService(PortfolioRepository portfolioRepository) {
+        this.portfolioRepository = portfolioRepository;
+    }
+
     public List<PortfolioSection> getAllSections() {
-        return repository.findAll();
+        return portfolioRepository.findAll();
     }
 
-    // 특정 섹션 조회
-    public Optional<PortfolioSection> getSectionById(String id) {
-        return repository.findById(id);
+    public PortfolioSection getSectionById(String id) {
+        return portfolioRepository.findById(id).orElse(null);
     }
 
-    // 섹션 추가
-    public PortfolioSection addSection(PortfolioSection section) {
-        return repository.save(section);
+    public PortfolioSection saveSection(PortfolioSection section) {
+        return portfolioRepository.save(section);
     }
 
-    // 섹션 수정
-    public boolean updateSection(String id, PortfolioSection updatedSection) {
-        Optional<PortfolioSection> optionalSection = repository.findById(id);
-        if (optionalSection.isPresent()) {
-            PortfolioSection existingSection = optionalSection.get();
-            // 비밀번호 확인
-            if (existingSection.getPassword().equals(updatedSection.getPassword())) {
-                existingSection.setTitle(updatedSection.getTitle());
-                existingSection.setContent(updatedSection.getContent());
-                repository.save(existingSection);
-                return true;
-            }
-        }
-        return false;
-    }
-
-    // 섹션 삭제
-    public boolean deleteSection(String id, String password) {
-        Optional<PortfolioSection> optionalSection = repository.findById(id);
-        if (optionalSection.isPresent()) {
-            PortfolioSection existingSection = optionalSection.get();
-            // 비밀번호 확인
-            if (existingSection.getPassword().equals(password)) {
-                repository.delete(existingSection);
-                return true;
-            }
-        }
-        return false;
+    public void deleteSection(String id) {
+        portfolioRepository.deleteById(id);
     }
 }
