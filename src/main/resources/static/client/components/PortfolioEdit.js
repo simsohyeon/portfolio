@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const ResumeEdit = ({ resumeData, onSave, onCancel }) => {
+const PortfolioEdit = ({ resumeData, onSave, onCancel }) => {
   const [personalInfo, setPersonalInfo] = useState(resumeData.personalInfo || {});
   const [summary, setSummary] = useState(resumeData.summary || {});
   const [myCareer, setMyCareer] = useState(resumeData.myCareer || "");
@@ -155,4 +155,4 @@ const ResumeEdit = ({ resumeData, onSave, onCancel }) => {
   );
 };
 
-export default ResumeEdit;
+export default PortfolioEdit;

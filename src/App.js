@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import ResumeView from "./main/resources/static/client/components/ResumeView";
-import ResumeEdit from "./main/resources/static/client/components/ResumeEdit";
+import PortfolioView from "./main/resources/static/client/components/PortfolioView";
+import PortfolioEdit from "./main/resources/static/client/components/PortfolioEdit";
 
 const App = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -8,9 +8,9 @@ const App = () => {
   return (
     <div className="App">
       {isEditing ? (
-        <ResumeEdit onSave={() => setIsEditing(false)} onCancel={() => setIsEditing(false)} />
+        <PortfolioEdit onSave={() => setIsEditing(false)} onCancel={() => setIsEditing(false)} />
       ) : (
-        <ResumeView onEdit={() => setIsEditing(true)} />
+        <PortfolioView onEdit={() => setIsEditing(true)} />
       )}
     </div>
   );
