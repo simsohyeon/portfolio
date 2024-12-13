@@ -28,7 +28,7 @@ const Career = () => {
 
   return (
     <div>
-      <h2>Career</h2>
+      <h2>Careers</h2>
       {careerData.length > 0 ? (
         <ul>
           {careerData.map((career, index) => (

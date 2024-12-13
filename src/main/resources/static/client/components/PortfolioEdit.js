@@ -1,155 +1,109 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import AboutEdit from "./AboutEdit";
+import CareerEdit from "./CareerEdit";
+import SkillsEdit from "./SkillsEdit";
+import ProjectsEdit from "./ProjectsEdit";
+import AwardEdit from "./AwardEdit";
+import { fetchPortfolioByType, updatePortfolio } from "../api/api";
 
-const PortfolioEdit = ({ resumeData, onSave, onCancel }) => {
-  const [personalInfo, setPersonalInfo] = useState(resumeData.personalInfo || {});
-  const [summary, setSummary] = useState(resumeData.summary || {});
-  const [myCareer, setMyCareer] = useState(resumeData.myCareer || "");
-  const [careers, setCareers] = useState(resumeData.careers || []);
-  const [skills, setSkills] = useState(resumeData.skills || []);
-  const [projects, setProjects] = useState(resumeData.projects || []);
-  const [certifications, setCertifications] = useState(resumeData.certifications || []);
+const PortfolioEdit = ({ onCancel }) => {
+  const [about, setAbout] = useState("");
+  const [career, setCareer] = useState([]);
+  const [skills, setSkills] = useState([]);
+  const [projects, setProjects] = useState([]);
+  const [award, setAward] = useState([]);
 
-  // Input 핸들러
-  const handleInputChange = (setter, field) => (e) => {
-    setter((prev) => ({ ...prev, [field]: e.target.value }));
+  // 초기 데이터 불러오기
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const aboutData = await fetchPortfolioByType("about");
+        setAbout(aboutData.content.about || "");
+
+        const careerData = await fetchPortfolioByType("career");
+        setCareer(careerData.content || []);
+
+        const skillsData = await fetchPortfolioByType("skills");
+        setSkills(skillsData.content || []);
+
+        const projectsData = await fetchPortfolioByType("projects");
+        setProjects(projectsData.content || []);
+
+         const awardData = await fetchPortfolioByType("award");
+         setAward(awardData.content || []);
+
+      } catch (error) {
+        console.error("데이터 불러오기 실패:", error);
+      }
+    };
+
+    loadData();
+  }, []);
+
+  // 데이터 저장
+  const handleSave = async () => {
+    try {
+      await updatePortfolio("about", { about });    // 소개 저장
+      await updatePortfolio("career", career);      // 경력 저장
+      await updatePortfolio("skills", skills);      // 스킬 저장
+      await updatePortfolio("projects", projects);  // 프로젝트 저장
+      await updatePortfolio("award", award);        // 수상 저장
+
+      console.log("모든 데이터 저장 성공");
+    } catch (error) {
+      console.error("저장 실패:", error);
+    }
   };
 
-  // 추가/삭제 핸들러
-  const handleAddItem = (setter, defaultItem) => {
-    setter((prev) => [...prev, { id: Date.now(), ...defaultItem }]);
-  };
-
-  const handleDeleteItem = (setter, id) => {
-    setter((prev) => prev.filter((item) => item.id !== id));
-  };
 
   return (
-    <div className="resume-edit">
-      <h2>이력서 수정</h2>
+    <div>
+      <h1>이력서 수정</h1>
 
-      {/* 개인 정보 섹션 */}
-      <div className="section">
-        <h3>개인 정보</h3>
-        <input
-          type="text"
-          placeholder="이름"
-          value={personalInfo.name || ""}
-          onChange={handleInputChange(setPersonalInfo, "name")}
-        />
-        <input
-          type="text"
-          placeholder="성별"
-          value={personalInfo.gender || ""}
-          onChange={handleInputChange(setPersonalInfo, "gender")}
-        />
-        <input
-          type="text"
-          placeholder="전화번호"
-          value={personalInfo.phone || ""}
-          onChange={handleInputChange(setPersonalInfo, "phone")}
-        />
-        <input
-          type="email"
-          placeholder="이메일"
-          value={personalInfo.email || ""}
-          onChange={handleInputChange(setPersonalInfo, "email")}
-        />
-        <input
-          type="text"
-          placeholder="주소"
-          value={personalInfo.address || ""}
-          onChange={handleInputChange(setPersonalInfo, "address")}
-        />
-      </div>
+      {/* AboutEdit */}
+      <AboutEdit about={about} onAboutChange={(value) => setAbout(value)} />
 
-      {/* 요약 정보 섹션 */}
-      <div className="section">
-        <h3>요약 정보</h3>
-        <input
-          type="text"
-          placeholder="학력사항"
-          value={summary.education || ""}
-          onChange={handleInputChange(setSummary, "education")}
-        />
-        <input
-          type="text"
-          placeholder="경력사항"
-          value={summary.career || ""}
-          onChange={handleInputChange(setSummary, "career")}
-        />
-      </div>
+      {/* CareerEdit */}
+      <CareerEdit career={career} onCareerChange={(value) => setCareer(value)} />
 
-      {/* My Career */}
-      <div className="section">
-        <h3>My Career</h3>
-        <textarea
-          placeholder="나의 커리어를 입력하세요"
-          value={myCareer}
-          onChange={(e) => setMyCareer(e.target.value)}
-        />
-      </div>
+      {/* SkillsEdit */}
+      <SkillsEdit skills={skills} onSkillsChange={(value) => setSkills(value)} />
 
-      {/* 경력 섹션 */}
-      <div className="section">
-        <h3>경력</h3>
-        {careers.map((career) => (
-          <div key={career.id} className="career-item">
-            <input
-              type="text"
-              placeholder="회사명"
-              value={career.company || ""}
-              onChange={(e) =>
-                setCareers((prev) =>
-                  prev.map((c) =>
-                    c.id === career.id ? { ...c, company: e.target.value } : c
-                  )
-                )
-              }
-            />
-            <input
-              type="text"
-              placeholder="직무"
-              value={career.role || ""}
-              onChange={(e) =>
-                setCareers((prev) =>
-                  prev.map((c) =>
-                    c.id === career.id ? { ...c, role: e.target.value } : c
-                  )
-                )
-              }
-            />
-            <button onClick={() => handleDeleteItem(setCareers, career.id)}>
-              삭제
-            </button>
-          </div>
-        ))}
-        <button
-          onClick={() =>
-            handleAddItem(setCareers, { company: "", role: "", duration: "" })
-          }
-        >
-          경력 추가
-        </button>
-      </div>
+      {/* ProjectsEdit */}
+      <ProjectsEdit projects={projects} onProjectsChange={(value) => setProjects(value)} />
+
+      {/* AwardEdit */}
+      <AwardEdit award={award} onAwardChange={(value) => setAward(value)} />
 
       {/* 저장 및 취소 버튼 */}
-      <div className="actions">
+      <div style={{ marginTop: "20px" }}>
         <button
-          onClick={() =>
-            onSave({
-              personalInfo,
-              summary,
-              myCareer,
-              careers,
-              skills,
-              projects,
-              certifications,
-            })
-          }
+          onClick={handleSave}
+          style={{
+            backgroundColor: "blue",
+            color: "white",
+            padding: "10px 20px",
+            border: "none",
+            borderRadius: "4px",
+            cursor: "pointer",
+          }}
         >
           저장
         </button>
-        <button onClick={onCancel}>취소</button>
+        <button
+          onClick={onCancel}
+          style={{
+            backgroundColor: "gray",
+            color: "white",
+            padding: "10px 20px",
+            marginLeft: "10px",
+            border: "none",
+            borderRadius: "4px",
+            cursor: "pointer",
+          }}
+        >
+          취소
+        </button>
       </div>
     </div>
   );

@@ -28,7 +28,6 @@ public class PasswordController {
             UserPassword storedPassword = mongoTemplate.findById("password-id", UserPassword.class, "user");
 
             if (storedPassword != null) {
-                System.out.println("Stored password: " + storedPassword.getPassword()); // 저장된 비밀번호 디버깅
                 // 입력된 비밀번호와 저장된 비밀번호 비교
                 if (inputPassword.equals(storedPassword.getPassword())) {
                     return ResponseEntity.ok().build(); // 인증 성공
