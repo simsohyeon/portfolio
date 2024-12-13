@@ -48,7 +48,7 @@ const AwardEdit = ({ award = [], onAwardChange }) => {
               onChange={(e) => handleUpdateAward(index, "organization", e.target.value)}
             />
             <input
-              type="text"
+              type="date"
               placeholder="Date"
               value={item.date}
               onChange={(e) => handleUpdateAward(index, "date", e.target.value)}

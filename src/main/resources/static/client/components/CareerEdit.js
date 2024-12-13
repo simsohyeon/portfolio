@@ -70,13 +70,13 @@ const CareerEdit = ({ career = [], onCareerChange }) => {
               onChange={(e) => handleUpdateCareer(index, "position", e.target.value)}
             />
             <input
-              type="text"
+              type="date"
               placeholder="Start Date"
               value={item.start_date}
               onChange={(e) => handleUpdateCareer(index, "start_date", e.target.value)}
             />
             <input
-              type="text"
+              type="date"
               placeholder="End Date"
               value={item.end_date}
               onChange={(e) => handleUpdateCareer(index, "end_date", e.target.value)}

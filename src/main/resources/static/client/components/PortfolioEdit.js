@@ -76,16 +76,18 @@ const PortfolioEdit = ({ onCancel }) => {
       <AwardEdit award={award} onAwardChange={(value) => setAward(value)} />
 
       {/* 저장 및 취소 버튼 */}
-      <div style={{ marginTop: "20px" }}>
+      <div style={{ textAlign: "center", marginTop: "20px" }}>
         <button
           onClick={handleSave}
           style={{
-            backgroundColor: "blue",
-            color: "white",
             padding: "10px 20px",
-            border: "none",
-            borderRadius: "4px",
+            fontSize: "16px",
             cursor: "pointer",
+            backgroundColor: "#007BFF", // 버튼 색상 수정
+            color: "white",
+            border: "none",
+            borderRadius: "5px", // 둥근 모서리 크기 통일
+            marginRight: "10px", // 버튼 간격 추가
           }}
         >
           저장
@@ -93,13 +95,13 @@ const PortfolioEdit = ({ onCancel }) => {
         <button
           onClick={onCancel}
           style={{
-            backgroundColor: "gray",
-            color: "white",
             padding: "10px 20px",
-            marginLeft: "10px",
-            border: "none",
-            borderRadius: "4px",
+            fontSize: "16px",
             cursor: "pointer",
+            backgroundColor: "gray", // 취소 버튼 색상
+            color: "white",
+            border: "none",
+            borderRadius: "5px", // 둥근 모서리 크기 통일
           }}
         >
           취소

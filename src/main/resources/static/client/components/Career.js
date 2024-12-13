@@ -36,7 +36,7 @@ const Career = () => {
               <h3>{career.company}</h3>
               <p>Position: {career.position}</p>
               <p>
-                Duration: {career.start_date} - {career.end_date}
+                Duration: {career.start_date} ~ {career.end_date}
               </p>
               <h4>Responsibilities:</h4>
               <ul>
