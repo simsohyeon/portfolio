@@ -1,0 +1,38 @@
+.edit-container {
+  margin: 20px auto;
+  max-width: 800px;
+}
+
+.edit-title {
+  font-weight: bold;
+  margin-bottom: 10px;
+  font-size: 1.5rem;
+}
+
+.edit-textfield {
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.edit-buttons {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.edit-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  color: white;
+  border: none;
+  border-radius: 5px;
+}
+
+.save-button {
+  background-color: #007bff;
+  margin-right: 10px;
+}
+
+.cancel-button {
+  background-color: gray;
+}

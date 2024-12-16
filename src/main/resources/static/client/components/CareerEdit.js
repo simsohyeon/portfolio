@@ -1,4 +1,14 @@
 import React from "react";
+import {
+  Grid,
+  TextField,
+  Button,
+  Switch,
+  FormControlLabel,
+  Box,
+  Typography,
+} from "@mui/material";
+import AddIcon from '@mui/icons-material/Add';
 
 const CareerEdit = ({ career = [], onCareerChange }) => {
   // 경력 추가
@@ -10,7 +20,9 @@ const CareerEdit = ({ career = [], onCareerChange }) => {
         position: "",
         start_date: "",
         end_date: "",
-        responsibilities: [""], // 초기 책임 항목으로 빈 문자열 추가
+        isCurrent: false,
+        department: "",
+        responsibilities: "",
       },
     ]);
   };
@@ -22,24 +34,11 @@ const CareerEdit = ({ career = [], onCareerChange }) => {
     onCareerChange(updatedCareers);
   };
 
-  // 책임 항목 추가
-  const handleAddResponsibility = (index) => {
+  // 재직중 토글
+  const handleToggleCurrent = (index) => {
     const updatedCareers = [...career];
-    updatedCareers[index].responsibilities.push("");
-    onCareerChange(updatedCareers);
-  };
-
-  // 책임 항목 수정
-  const handleUpdateResponsibility = (careerIndex, responsibilityIndex, value) => {
-    const updatedCareers = [...career];
-    updatedCareers[careerIndex].responsibilities[responsibilityIndex] = value;
-    onCareerChange(updatedCareers);
-  };
-
-  // 책임 항목 삭제
-  const handleRemoveResponsibility = (careerIndex, responsibilityIndex) => {
-    const updatedCareers = [...career];
-    updatedCareers[careerIndex].responsibilities.splice(responsibilityIndex, 1);
+    updatedCareers[index].isCurrent = !updatedCareers[index].isCurrent;
+    if (updatedCareers[index].isCurrent) updatedCareers[index].end_date = "";
     onCareerChange(updatedCareers);
   };
 
@@ -50,66 +49,146 @@ const CareerEdit = ({ career = [], onCareerChange }) => {
   };
 
   return (
-    <div>
-      <h2>Career</h2>
-      <button onClick={handleAddCareer}>Add Career</button>
-      {career.length > 0 ? (
-        career.map((item, index) => (
-          <div key={index} style={{ marginBottom: "20px", border: "1px solid gray", padding: "10px" }}>
-            <h3>Career #{index + 1}</h3>
-            <input
-              type="text"
-              placeholder="Company"
-              value={item.company}
-              onChange={(e) => handleUpdateCareer(index, "company", e.target.value)}
-            />
-            <input
-              type="text"
-              placeholder="Position"
-              value={item.position}
-              onChange={(e) => handleUpdateCareer(index, "position", e.target.value)}
-            />
-            <input
-              type="date"
-              placeholder="Start Date"
-              value={item.start_date}
-              onChange={(e) => handleUpdateCareer(index, "start_date", e.target.value)}
-            />
-            <input
-              type="date"
-              placeholder="End Date"
-              value={item.end_date}
-              onChange={(e) => handleUpdateCareer(index, "end_date", e.target.value)}
-            />
+    <Box
+      sx={{
+        margin: "20px auto",
+        padding: "20px",
+        maxWidth: "800px",
+        borderRadius: "8px"
+      }}
+    >
+       <Grid container alignItems="center">
+           <Grid item>
+             <Typography
+               variant="h6"
+               sx={{ fontWeight: "bold", marginLeft: "8px" }}
+             >
+               경력 수정
+             </Typography>
+           </Grid>
 
-            <h4>Responsibilities</h4>
-            <ul>
-              {item.responsibilities.map((task, taskIndex) => (
-                <li key={taskIndex}>
-                  <input
-                    type="text"
-                    placeholder="Responsibility"
-                    value={task}
-                    onChange={(e) =>
-                      handleUpdateResponsibility(index, taskIndex, e.target.value)
-                    }
+           <Grid item xs>
+             <Box display="flex" justifyContent="flex-end">
+               <AddIcon
+                 color="primary"
+                 sx={{ cursor: "pointer", fontSize: 25 }}
+                 onClick={handleAddCareer}
+               />
+             </Box>
+           </Grid>
+         </Grid>
+
+
+      {career.map((item, index) => (
+        <Box
+          key={index}
+          sx={{
+            marginBottom: "20px",
+            padding: "15px",
+            border: "1px solid #ccc",
+            borderRadius: "8px",
+          }}
+        >
+          <Grid container spacing={2}>
+            {/* 회사명 */}
+            <Grid item xs={12} sm={3}>
+              <TextField
+                label="회사명"
+                fullWidth
+                value={item.company}
+                onChange={(e) => handleUpdateCareer(index, "company", e.target.value)}
+              />
+            </Grid>
+
+            {/* 입사년월 */}
+            <Grid item xs={12} sm={3}>
+              <TextField
+                label="입사년월"
+                type="month"
+                fullWidth
+                InputLabelProps={{ shrink: true }}
+                value={item.start_date}
+                onChange={(e) => handleUpdateCareer(index, "start_date", e.target.value)}
+              />
+            </Grid>
+
+            {/* 퇴사년월 */}
+            <Grid item xs={12} sm={3} container alignItems="center">
+              <TextField
+                label="퇴사년월"
+                type="month"
+                fullWidth
+                InputLabelProps={{ shrink: true }}
+                value={item.end_date}
+                onChange={(e) => handleUpdateCareer(index, "end_date", e.target.value)}
+                disabled={item.isCurrent}
+              />
+              </Grid>
+              <Grid item xs={12} sm={3} container alignItems="center">
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={item.isCurrent}
+                    onChange={() => handleToggleCurrent(index)}
+                    color="primary"
                   />
-                  <button onClick={() => handleRemoveResponsibility(index, taskIndex)}>
-                    Remove
-                  </button>
-                </li>
-              ))}
-            </ul>
-            <button onClick={() => handleAddResponsibility(index)}>Add Responsibility</button>
-            <button onClick={() => handleRemoveCareer(index)} style={{ color: "red" }}>
-              Remove Career
-            </button>
-          </div>
-        ))
-      ) : (
-        <p>No career data available. Add a new career entry.</p>
-      )}
-    </div>
+                }
+                label="재직중"
+                sx={{ marginLeft: "10px" }}
+              />
+            </Grid>
+
+            {/* 직무 */}
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="직무"
+                fullWidth
+                value={item.position}
+                onChange={(e) => handleUpdateCareer(index, "position", e.target.value)}
+              />
+            </Grid>
+
+            {/* 직급 */}
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="직급"
+                fullWidth
+                value={item.department}
+                onChange={(e) => handleUpdateCareer(index, "department", e.target.value)}
+              />
+            </Grid>
+
+            {/* 담당업무 */}
+            <Grid item xs={12}>
+              <TextField
+                label="담당업무"
+                multiline
+                rows={4}
+                fullWidth
+                value={item.responsibilities}
+                onChange={(e) =>
+                  handleUpdateCareer(index, "responsibilities", e.target.value)
+                }
+                placeholder="담당 업무를 입력하세요."
+              />
+            </Grid>
+
+            {/* 삭제 버튼 */}
+            <Grid item xs={12}>
+             <Box display="flex" justifyContent="flex-end">
+                <Button
+                    variant="outlined"
+                    color="secondary"
+                    onClick={() => handleRemoveCareer(index)}
+                >
+                경력 삭제
+                </Button>
+             </Box>
+            </Grid>
+          </Grid>
+        </Box>
+      ))}
+    </Box>
   );
 };
 

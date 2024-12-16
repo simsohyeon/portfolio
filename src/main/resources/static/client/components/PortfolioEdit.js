@@ -18,7 +18,7 @@ const PortfolioEdit = ({ onCancel }) => {
     const loadData = async () => {
       try {
         const aboutData = await fetchPortfolioByType("about");
-        setAbout(aboutData.content.about || "");
+        setAbout(aboutData.content || []);
 
         const careerData = await fetchPortfolioByType("career");
         setCareer(careerData.content || []);
@@ -43,23 +43,22 @@ const PortfolioEdit = ({ onCancel }) => {
   // 데이터 저장
   const handleSave = async () => {
     try {
-      await updatePortfolio("about", { about });    // 소개 저장
+      await updatePortfolio("about", about);        // 소개 저장
       await updatePortfolio("career", career);      // 경력 저장
       await updatePortfolio("skills", skills);      // 스킬 저장
       await updatePortfolio("projects", projects);  // 프로젝트 저장
       await updatePortfolio("award", award);        // 수상 저장
 
-      console.log("모든 데이터 저장 성공");
+      alert('저장되었습니다!');
     } catch (error) {
       console.error("저장 실패:", error);
+      alert('저장 실패:', error);
     }
   };
 
 
   return (
     <div>
-      <h1>이력서 수정</h1>
-
       {/* AboutEdit */}
       <AboutEdit about={about} onAboutChange={(value) => setAbout(value)} />
 
