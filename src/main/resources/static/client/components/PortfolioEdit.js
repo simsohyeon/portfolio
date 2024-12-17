@@ -4,9 +4,12 @@ import CareerEdit from "./CareerEdit";
 import SkillsEdit from "./SkillsEdit";
 import ProjectsEdit from "./ProjectsEdit";
 import AwardEdit from "./AwardEdit";
+import PortfolioView from "./PortfolioView";
+import { useNavigate } from "react-router-dom";
 import { fetchPortfolioByType, updatePortfolio } from "../api/api";
 
 const PortfolioEdit = ({ onCancel }) => {
+  const navigate = useNavigate(); // useNavigate 선언 위치 확인
   const [about, setAbout] = useState("");
   const [career, setCareer] = useState([]);
   const [skills, setSkills] = useState([]);
@@ -29,9 +32,8 @@ const PortfolioEdit = ({ onCancel }) => {
         const projectsData = await fetchPortfolioByType("projects");
         setProjects(projectsData.content || []);
 
-         const awardData = await fetchPortfolioByType("award");
-         setAward(awardData.content || []);
-
+        const awardData = await fetchPortfolioByType("award");
+        setAward(awardData.content || []);
       } catch (error) {
         console.error("데이터 불러오기 실패:", error);
       }
@@ -43,19 +45,20 @@ const PortfolioEdit = ({ onCancel }) => {
   // 데이터 저장
   const handleSave = async () => {
     try {
-      await updatePortfolio("about", about);        // 소개 저장
-      await updatePortfolio("career", career);      // 경력 저장
-      await updatePortfolio("skills", skills);      // 스킬 저장
-      await updatePortfolio("projects", projects);  // 프로젝트 저장
-      await updatePortfolio("award", award);        // 수상 저장
+      await updatePortfolio("about", about);
+      await updatePortfolio("career", career);
+      await updatePortfolio("skills", skills);
+      await updatePortfolio("projects", projects);
+      await updatePortfolio("award", award);
 
-      alert('저장되었습니다!');
+      alert("저장되었습니다!");
+      navigate(PortfolioView); // 저장 후 View 화면으로 이동
+      window.location.reload();
     } catch (error) {
       console.error("저장 실패:", error);
-      alert('저장 실패:', error);
+      alert("저장 실패: " + error.message);
     }
   };
-
 
   return (
     <div>
@@ -69,7 +72,10 @@ const PortfolioEdit = ({ onCancel }) => {
       <SkillsEdit skills={skills} onSkillsChange={(value) => setSkills(value)} />
 
       {/* ProjectsEdit */}
-      <ProjectsEdit projects={projects} onProjectsChange={(value) => setProjects(value)} />
+      <ProjectsEdit
+        projects={projects}
+        onProjectsChange={(value) => setProjects(value)}
+      />
 
       {/* AwardEdit */}
       <AwardEdit award={award} onAwardChange={(value) => setAward(value)} />
@@ -82,11 +88,11 @@ const PortfolioEdit = ({ onCancel }) => {
             padding: "10px 20px",
             fontSize: "16px",
             cursor: "pointer",
-            backgroundColor: "#007BFF", // 버튼 색상 수정
+            backgroundColor: "#007BFF",
             color: "white",
             border: "none",
-            borderRadius: "5px", // 둥근 모서리 크기 통일
-            marginRight: "10px", // 버튼 간격 추가
+            borderRadius: "5px",
+            marginRight: "10px",
           }}
         >
           저장
@@ -97,10 +103,10 @@ const PortfolioEdit = ({ onCancel }) => {
             padding: "10px 20px",
             fontSize: "16px",
             cursor: "pointer",
-            backgroundColor: "gray", // 취소 버튼 색상
+            backgroundColor: "gray",
             color: "white",
             border: "none",
-            borderRadius: "5px", // 둥근 모서리 크기 통일
+            borderRadius: "5px",
           }}
         >
           취소

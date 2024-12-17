@@ -32,18 +32,24 @@ const Career = () => {
   }, []);
 
   if (error) return <Typography color="error">{error}</Typography>;
-  if (!careerData.length) return <Typography>Loading...</Typography>;
+  if (!careerData.length) return <Typography></Typography>;
 
   return (
     <Box sx={{ margin: "20px auto", maxWidth: "800px" }}>
-      {/* 타이틀 */}
-      <Typography variant="h5" fontWeight="bold" gutterBottom>
-        경력{" "}
-        <Typography variant="subtitle1" component="span" color="gray">
-          총 경력 {careerData.length}개
-        </Typography>
-      </Typography>
-      <Divider sx={{ marginBottom: 2 }} />
+      {/* 타이틀과 총 경력 수 */}
+      <Grid container justifyContent="space-between" alignItems="center">
+        <Grid item>
+          <Typography variant="h6" fontWeight="bold">
+            경력
+          </Typography>
+        </Grid>
+        <Grid item>
+          <Typography variant="subtitle2" color="gray">
+            총 경력 {careerData.length}개
+          </Typography>
+        </Grid>
+      </Grid>
+      <Divider sx={{ marginBottom: 2, marginTop: 1 }} />
 
       {/* 경력 리스트 */}
       {careerData.map((career, index) => (
@@ -84,13 +90,11 @@ const Career = () => {
             </Grid>
           </Grid>
 
-
           {/* 상세 정보 */}
           <Box sx={{ paddingLeft: "35px", marginTop: 1 }}>
-          <Typography variant="body2" sx={{ marginTop: 1 }}>
-             {career.responsibilities || ""}
-          </Typography>
-
+            <Typography variant="body2" sx={{ marginTop: 1 }}>
+              {career.responsibilities || ""}
+            </Typography>
           </Box>
           <Divider sx={{ marginTop: 2 }} />
         </Box>

@@ -4,7 +4,6 @@ import Career from "./Career";
 import Skills from "./Skills";
 import Projects from "./Projects";
 import Award from "./Award";
-import Contact from "./Contact";
 
 const PortfolioView = () => {
   return (
@@ -14,7 +13,6 @@ const PortfolioView = () => {
       <Skills />
       <Projects />
       <Award />
-      <Contact />
     </div>
   );
 };
