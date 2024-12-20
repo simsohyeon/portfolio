@@ -5,12 +5,15 @@ import {
   Grid,
   Typography,
   IconButton,
+  useMediaQuery,
 } from "@mui/material";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import AddIcon from "@mui/icons-material/Add";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 const ProjectsEdit = ({ projects, onProjectsChange }) => {
+  const isMobile = useMediaQuery("(max-width:600px)"); // Responsive breakpoint
+
   // 프로젝트 추가
   const handleAddProject = () => {
     onProjectsChange([
@@ -45,14 +48,14 @@ const ProjectsEdit = ({ projects, onProjectsChange }) => {
     <Box
       sx={{
         margin: "20px auto",
-        padding: "20px",
+        padding: isMobile ? "10px" : "20px",
         maxWidth: "800px",
         borderRadius: "8px",
       }}
     >
       {/* 제목 */}
       <Grid container justifyContent="space-between" alignItems="center" mb={2}>
-        <Typography variant="h6" fontWeight="bold">
+        <Typography variant={isMobile ? "h6" : "h5"} fontWeight="bold">
           프로젝트
         </Typography>
         <IconButton color="primary" onClick={handleAddProject}>
@@ -79,7 +82,7 @@ const ProjectsEdit = ({ projects, onProjectsChange }) => {
                       sx={{
                         border: "1px solid #ddd",
                         borderRadius: "8px",
-                        padding: "20px",
+                        padding: isMobile ? "10px" : "20px",
                         marginBottom: "20px",
                       }}
                     >
@@ -141,7 +144,7 @@ const ProjectsEdit = ({ projects, onProjectsChange }) => {
                           <TextField
                             label="프로젝트 설명"
                             multiline
-                            rows={4}
+                            rows={isMobile ? 3 : 4}
                             fullWidth
                             value={project.description}
                             onChange={(e) =>

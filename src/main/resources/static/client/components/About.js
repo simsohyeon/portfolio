@@ -5,6 +5,7 @@ import {
   Typography,
   Grid,
   Avatar,
+  useMediaQuery,
 } from "@mui/material";
 
 // 만나이 계산 함수
@@ -25,6 +26,9 @@ const About = () => {
   const [aboutData, setAboutData] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  // 반응형: 화면 크기 감지
+  const isMobile = useMediaQuery("(max-width:768px)");
 
   useEffect(() => {
     const loadAbout = async () => {
@@ -51,18 +55,24 @@ const About = () => {
         margin: "20px auto",
         padding: "20px",
         maxWidth: "800px",
-        borderRadius: "8px"
+        borderRadius: "8px",
       }}
     >
       {/* 상단 프로필 */}
-      <Grid container spacing={2} alignItems="center">
+      <Grid container spacing={isMobile ? 1 : 2} alignItems="center">
         {/* 사진 */}
-        <Grid item xs={12} sm={4} textAlign="center">
+        <Grid
+          item
+          xs={12}
+          sm={4}
+          textAlign="center"
+          sx={{ marginBottom: isMobile ? "10px" : "0" }}
+        >
           <Avatar
             src={aboutData.profileImage || ""}
             sx={{
-              width: 120,
-              height: 120,
+              width: isMobile ? 80 : 120,
+              height: isMobile ? 80 : 120,
               margin: "0 auto",
             }}
           />
@@ -70,7 +80,11 @@ const About = () => {
 
         {/* 이름, 나이, 이메일 */}
         <Grid item xs={12} sm={8}>
-          <Typography variant="h4" fontWeight="bold" gutterBottom>
+          <Typography
+            variant={isMobile ? "h5" : "h4"}
+            fontWeight="bold"
+            gutterBottom
+          >
             {aboutData.name || "이름 정보 없음"}
           </Typography>
           <Typography variant="body1" color="textSecondary">
@@ -80,20 +94,27 @@ const About = () => {
                 )}세)`
               : "나이 정보 없음"}
           </Typography>
-          <Typography variant="body1" sx={{ marginBottom: 1 }}>
+          <Typography
+            variant="body1"
+            sx={{ marginBottom: 1, fontSize: isMobile ? "0.9rem" : "1rem" }}
+          >
             📧 {aboutData.email || "이메일 정보 없음"}
           </Typography>
         </Grid>
       </Grid>
 
       {/* 간략 소개 */}
-      <Box mt={5}>
+      <Box mt={5} sx={{ textAlign: "left" }}>
         <Typography
           variant="body1"
           color="textSecondary"
-          sx={{ whiteSpace: "pre-line", lineHeight: 1.6 }}
+          sx={{
+            whiteSpace: "pre-line",
+            lineHeight: 1.6,
+            fontSize: isMobile ? "0.9rem" : "1rem",
+          }}
         >
-        👩🏻‍💻 {aboutData.about || "간략한 소개 내용이 없습니다."}
+          👩🏻‍💻 {aboutData.about || "간략한 소개 내용이 없습니다."}
         </Typography>
       </Box>
     </Box>

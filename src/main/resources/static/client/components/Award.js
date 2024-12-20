@@ -4,19 +4,24 @@ import {
   Box,
   Typography,
   Divider,
-  Grid
+  Grid,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 
 const Award = () => {
   const [awardData, setAwardData] = useState([]);
   const [error, setError] = useState(null);
 
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
   useEffect(() => {
     const loadAwards = async () => {
       try {
         const data = await fetchPortfolioByType("award");
         if (data && Array.isArray(data.content)) {
-          setAwardData(data.content); // 데이터가 배열일 경우 저장
+          setAwardData(data.content);
         } else {
           setAwardData([]);
         }
@@ -33,37 +38,55 @@ const Award = () => {
   if (!awardData.length) return <Typography></Typography>;
 
   return (
-    <Box sx={{ margin: "20px auto", maxWidth: "800px" }}>
-    {/* 타이틀과 총 개수*/}
-    <Grid container justifyContent="space-between" alignItems="center">
+    <Box
+      sx={{
+        margin: "20px auto",
+        maxWidth: "800px",
+        padding: isMobile ? "10px" : "20px",
+        borderRadius: "8px",
+      }}
+    >
+      {/* 타이틀과 총 개수 */}
+      <Grid container justifyContent="space-between" alignItems="center">
         <Grid item>
-            <Typography variant="h6" fontWeight="bold">
-                자격/어학/수상
-            </Typography>
+          <Typography
+            variant={"h6"}
+            fontWeight="bold"
+          >
+            자격/어학/수상
+          </Typography>
         </Grid>
         <Grid item>
-            <Typography variant="subtitle2" color="gray">
-                총 {awardData.length}개
-            </Typography>
+          <Typography
+            variant="subtitle2"
+            color="gray"
+            fontSize={isMobile ? "0.9rem" : "1rem"}
+          >
+            총 {awardData.length}개
+          </Typography>
         </Grid>
-    </Grid>
-    <Divider sx={{ marginBottom: 2 }} />
+      </Grid>
+      <Divider sx={{ marginBottom: 2 }} />
 
       {/* 수상 내역 리스트 */}
       {awardData.map((award, index) => (
         <Box key={index} sx={{ marginBottom: 3 }}>
-          <Grid container spacing={2} alignItems="center">
+          <Grid container spacing={isMobile ? 1 : 2} alignItems="center">
             {/* 날짜 */}
-            <Grid item xs={2}>
-              <Typography variant="body1" color="textSecondary">
+            <Grid item xs={12} sm={2} textAlign={isMobile ? "left" : "center"}>
+              <Typography
+                variant="body2"
+                color="textSecondary"
+                fontSize={isMobile ? "0.8rem" : "1rem"}
+              >
                 {award.date || "날짜 없음"}
               </Typography>
             </Grid>
 
             {/* 수상 제목과 기관 */}
-            <Grid item xs={10}>
+            <Grid item xs={12} sm={10}>
               <Typography
-                variant="subtitle1"
+                variant={isMobile ? "subtitle2" : "subtitle1"}
                 fontWeight="bold"
                 display="inline"
                 sx={{ marginRight: 1 }}
@@ -74,12 +97,17 @@ const Award = () => {
                 variant="body2"
                 color="textSecondary"
                 display="inline"
+                fontSize={isMobile ? "0.8rem" : "0.9rem"}
               >
                 {award.organization ? ` | ${award.organization}` : ""}
               </Typography>
               <Typography
                 variant="body2"
-                sx={{ marginTop: 1, whiteSpace: "pre-line" }}
+                sx={{
+                  marginTop: 1,
+                  whiteSpace: "pre-line",
+                  fontSize: isMobile ? "0.8rem" : "0.9rem",
+                }}
               >
                 {award.description || ""}
               </Typography>

@@ -1,4 +1,8 @@
-const BASE_URL = "http://localhost:8080/api";
+// 현재 호스트에 따라 BASE_URL 설정
+const BASE_URL = window.location.hostname === "localhost"
+  ? "http://localhost:8080/api"
+  : "http://192.168.0.41:8080/api";
+
 
 // 공통 Fetch 함수
 const handleFetch = async (url, options = {}) => {

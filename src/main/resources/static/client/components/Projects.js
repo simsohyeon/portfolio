@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { fetchPortfolioByType } from "../api/api";
-import { Box, Grid, Typography, Divider } from "@mui/material";
+import { Box, Grid, Typography, Divider, useMediaQuery } from "@mui/material";
 
 const Projects = () => {
   const [projectsData, setProjectsData] = useState([]);
   const [error, setError] = useState(null);
+
+  const isMobile = useMediaQuery("(max-width:600px)");
 
   useEffect(() => {
     const loadProjects = async () => {
@@ -25,37 +27,38 @@ const Projects = () => {
   }, []);
 
   if (error) return <Typography color="error">{error}</Typography>;
-  if (!projectsData.length) return <Typography> </Typography>;
+  if (!projectsData.length) return <Typography>프로젝트 데이터가 없습니다.</Typography>;
 
   return (
-    <Box sx={{ margin: "20px auto", maxWidth: "800px" }}>
-      {/* 타이틀과 총 경력 수 */}
+    <Box sx={{ margin: "20px auto", maxWidth: "800px", padding: isMobile ? "10px" : "20px" }}>
+      {/* 타이틀과 총 개수 */}
       <Grid container justifyContent="space-between" alignItems="center">
-         <Grid item>
-            <Typography variant="h6" fontWeight="bold">
-               프로젝트
-            </Typography>
-         </Grid>
-         <Grid item>
-            <Typography variant="subtitle2" color="gray">
-              총 {projectsData.length}개
-            </Typography>
-         </Grid>
+        <Grid item>
+          <Typography variant={"h6" } fontWeight="bold">
+            프로젝트
+          </Typography>
+        </Grid>
+        <Grid item>
+          <Typography variant="subtitle2" color="gray" fontSize={isMobile ? "0.9rem" : "1rem"}>
+            총 {projectsData.length}개
+          </Typography>
+        </Grid>
       </Grid>
-      <Divider sx={{ marginBottom: 2}} />
+      <Divider sx={{ marginBottom: 2 }} />
 
-      {/* 프로젝트 리스트 */}
       {projectsData.map((project, index) => (
         <Box key={index} sx={{ marginBottom: 3 }}>
-          {/* 상단 정보 */}
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={3}>
-              <Typography variant="subtitle1" color="gray">
+          <Grid container spacing={2} alignItems="center">
+            {/* 날짜 */}
+            <Grid item xs={12} sm={3} textAlign={isMobile ? "left" : "right"}>
+              <Typography variant="subtitle1" color="gray" fontSize={isMobile ? "0.8rem" : "1rem"}>
                 {project.startDate} ~ {project.endDate || "진행 중"}
               </Typography>
             </Grid>
+
+            {/* 프로젝트 제목 */}
             <Grid item xs={12} sm={9}>
-              <Typography variant="h6" fontWeight="bold">
+              <Typography fontWeight="bold" variant={isMobile ? "subtitle2" : "subtitle1"}>
                 {project.title || "프로젝트 제목 없음"}
               </Typography>
               <Typography variant="body2" color="textSecondary">
@@ -64,14 +67,19 @@ const Projects = () => {
             </Grid>
           </Grid>
 
-          {/* 프로젝트 설명 */}
+          {/* 프로젝트 내용 */}
           <Typography
             variant="body1"
-            sx={{ marginTop: 1, paddingLeft: "8px", whiteSpace: "pre-line" }}
+            fontSize={isMobile ? "0.8rem" : "0.9rem"}
+            sx={{
+              marginTop: 1,
+              paddingLeft: isMobile ? "0" : "8px",
+              whiteSpace: "pre-line"
+            }}
           >
             {project.description || "설명이 없습니다."}
           </Typography>
-          <Divider sx={{ marginTop: 2}} />
+          <Divider sx={{ marginTop: 2 }} />
         </Box>
       ))}
     </Box>

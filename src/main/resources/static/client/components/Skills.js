@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { fetchPortfolioByType } from "../api/api";
-import { Box, Typography, Chip, Grid, Divider } from "@mui/material";
+import { Box, Typography, Chip, Grid, Divider, useMediaQuery } from "@mui/material";
 
 const Skills = () => {
   const [skills, setSkills] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const isMobile = useMediaQuery("(max-width:600px)");
 
   useEffect(() => {
     const loadSkills = async () => {
@@ -23,22 +25,22 @@ const Skills = () => {
     loadSkills();
   }, []);
 
-  if (loading) return <Typography></Typography>;
+  if (loading) return <Typography>Loading...</Typography>;
   if (error) return <Typography color="error">{error}</Typography>;
 
   return (
     <Box
       sx={{
         margin: "20px auto",
-        padding: "20px",
         maxWidth: "800px",
+        padding: isMobile ? "10px" : "20px",
         borderRadius: "8px",
       }}
     >
       {/* 제목과 총 스킬 개수 */}
       <Grid container justifyContent="space-between" alignItems="center">
         <Grid item>
-          <Typography variant="h6" fontWeight="bold">
+          <Typography variant={isMobile ? "h6" : "h5"} fontWeight="bold">
             나의 스킬
           </Typography>
         </Grid>
@@ -56,15 +58,16 @@ const Skills = () => {
       <Grid container spacing={1}>
         {skills.length > 0 ? (
           skills.map((skill, index) => (
-            <Grid item key={index}>
+            <Grid item key={index} xs={6} sm={4} md={3}>
               <Chip
                 label={skill}
                 variant="outlined"
                 sx={{
-                  fontSize: "14px",
+                  fontSize: "12px",
                   borderRadius: "20px",
                   paddingX: "8px",
                   marginBottom: "8px",
+                  width: "100%",
                 }}
               />
             </Grid>
@@ -75,6 +78,7 @@ const Skills = () => {
             color="textSecondary"
             sx={{ textAlign: "center", width: "100%" }}
           >
+            스킬 데이터가 없습니다.
           </Typography>
         )}
       </Grid>

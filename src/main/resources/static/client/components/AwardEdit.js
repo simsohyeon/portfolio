@@ -5,12 +5,15 @@ import {
   TextField,
   IconButton,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 const AwardEdit = ({ award = [], onAwardChange }) => {
+  const isMobile = useMediaQuery("(max-width:600px)"); // 반응형 감지
+
   // 수상 데이터 추가
   const handleAddAward = () => {
     onAwardChange([
@@ -32,7 +35,7 @@ const AwardEdit = ({ award = [], onAwardChange }) => {
     onAwardChange(updatedAwards);
   };
 
-  // 드래그 앤 드랍 정렬 처리
+  // 드래그 앤 드롭 정렬 처리
   const handleDragEnd = (result) => {
     if (!result.destination) return; // 목적지가 없으면 리턴
     const items = Array.from(award);
@@ -60,7 +63,7 @@ const AwardEdit = ({ award = [], onAwardChange }) => {
         </IconButton>
       </Grid>
 
-      {/* 드래그 앤 드랍 컨텍스트 */}
+      {/* 드래그 앤 드롭 컨텍스트 */}
       <DragDropContext onDragEnd={handleDragEnd}>
         <Droppable droppableId="awards">
           {(provided) => (
@@ -85,11 +88,11 @@ const AwardEdit = ({ award = [], onAwardChange }) => {
                           border: "1px solid #ddd",
                           borderRadius: "8px",
                           padding: "20px",
-                          marginBottom: "20px"
+                          marginBottom: "20px",
                         }}
                       >
                         <Grid container spacing={2} alignItems="center">
-                          <Grid item xs={5}>
+                          <Grid item xs={12} sm={5}>
                             <TextField
                               label="제목"
                               fullWidth
@@ -100,22 +103,18 @@ const AwardEdit = ({ award = [], onAwardChange }) => {
                               }
                             />
                           </Grid>
-                          <Grid item xs={4}>
+                          <Grid item xs={12} sm={4}>
                             <TextField
                               label="기관"
                               fullWidth
                               variant="outlined"
                               value={item.organization}
                               onChange={(e) =>
-                                handleUpdateAward(
-                                  index,
-                                  "organization",
-                                  e.target.value
-                                )
+                                handleUpdateAward(index, "organization", e.target.value)
                               }
                             />
                           </Grid>
-                          <Grid item xs={3}>
+                          <Grid item xs={12} sm={3}>
                             <TextField
                               label="날짜"
                               type="month"
@@ -138,11 +137,7 @@ const AwardEdit = ({ award = [], onAwardChange }) => {
                             variant="outlined"
                             value={item.description}
                             onChange={(e) =>
-                              handleUpdateAward(
-                                index,
-                                "description",
-                                e.target.value
-                              )
+                              handleUpdateAward(index, "description", e.target.value)
                             }
                           />
                         </Grid>

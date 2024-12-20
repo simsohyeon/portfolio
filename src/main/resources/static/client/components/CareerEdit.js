@@ -8,11 +8,12 @@ import {
   Switch,
   FormControlLabel,
 } from "@mui/material";
-import AddIcon from '@mui/icons-material/Add';
+import AddIcon from "@mui/icons-material/Add";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 const CareerEdit = ({ career = [], onCareerChange }) => {
+
   // 경력 추가
   const handleAddCareer = () => {
     onCareerChange([
@@ -204,7 +205,11 @@ const CareerEdit = ({ career = [], onCareerChange }) => {
                             fullWidth
                             value={item.responsibilities}
                             onChange={(e) =>
-                              handleUpdateCareer(index, "responsibilities", e.target.value)
+                              handleUpdateCareer(
+                                index,
+                                "responsibilities",
+                                e.target.value
+                              )
                             }
                             placeholder="담당 업무를 입력하세요."
                           />

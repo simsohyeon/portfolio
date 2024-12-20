@@ -36,3 +36,4 @@
 #### 컴포넌트 저장
 ![저장버튼 클릭 시](src/main/resources/static/client/images/img_10.png)
 
+#### 모바일 화면 조회
