@@ -5,14 +5,12 @@ import {
   TextField,
   IconButton,
   Typography,
-  useMediaQuery,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 const AwardEdit = ({ award = [], onAwardChange }) => {
-  const isMobile = useMediaQuery("(max-width:600px)"); // 반응형 감지
 
   // 수상 데이터 추가
   const handleAddAward = () => {
